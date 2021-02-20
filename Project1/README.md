@@ -1,16 +1,15 @@
 # Project 1
 
 ## Introduction 
-  	This file includes python program solution for Project 1 for
-	UMD ENPM 661 Spring 2021 batch. The folders consists of python
-	program along with generated outputs as .txt files.
+This file includes python program solution for Project 1 for
+UMD ENPM 661 Spring 2021 batch. The folders consists of python
+program along with generated outputs as .txt files.
   
     This project will sove given 5 cases for a 15 number/block puzzle with BFS 
   (Brute Force Search) algorithm. It will generate the path in console as well
   as in a separate .txt file with name CaseX.txt where X is the number of that case.
   
-    Note that the programe generates the .txt file, so if you run the program,
-  there is no need to download the file.
+    Note that the programe generates the .txt file, so if you run the program, there is no need to download the file.
 	
 #### These files are executable:
   * Case1.py
