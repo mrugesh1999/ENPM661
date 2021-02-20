@@ -19,11 +19,11 @@ program along with generated outputs as .txt files.
   * Case5.py
  
 #### These following files are the .txt output
-  * Case1.py
-  * Case2.py
-  * Case3.py
-  * Case4.py
-  * Case5.py
+  * Case1.txt
+  * Case2.txt
+  * Case3.txt
+  * Case4.txt
+  * Case5.txt
  
  
 ## Requirements
@@ -32,6 +32,7 @@ program along with generated outputs as .txt files.
        *********************************************************************************
        
 ### To run this code following libraries are required
+
 * NumPy
 * timeit
 
