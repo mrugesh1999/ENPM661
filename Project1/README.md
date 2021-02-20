@@ -38,7 +38,7 @@ program along with generated outputs as .txt files.
 
 ### Installation (For ubuntu 18.04)
 * timeit
-     * It is an built in library since python 2.3
+     It is a built in library since python 2.3
 
 
 * NumPy
