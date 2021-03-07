@@ -2,31 +2,33 @@
 import numpy as np
 import cv2
 
+# Creating a blank image of scale 3X
 blank_image = np.zeros((900, 1200, 3), np.uint8)
 
+# Assigning all values as gray
 blank_image[:, :] = (128, 128, 128)  # (B, G, R)
 
 calc_arr = np.zeros((300, 400), dtype='int')
 x_max = calc_arr.shape[0]
 y_max = calc_arr.shape[1]
-# result = cv2.VideoWriter('Tag0.avi',
-#                          cv2.VideoWriter_fourcc(*'MJPG'),
-#                          10, (blank_image.shape[1], blank_image.shape[0]))
 
 
+# Function to cvt point to opencv image
 def plot_point(r, l):
     blank_image[r * 3:(r + 1) * 3, l * 3:(l + 1) * 3] = (255, 0, 0)
 
 
-def cvt_str(point):
+# Function to convert list to string
+def cvt_str(point_given):
     string = ''
-    point_cpy = point.copy()
+    point_cpy = point_given[:]
     point_cpy[0] = "{0:0=3d}".format(int(point_cpy[0]))
     point_cpy[1] = "{0:0=3d}".format(int(point_cpy[1]))
     string = string + str(point_cpy[0]) + str(point_cpy[1])
     return string
 
 
+# Functions for each obstacle
 def in_ellipse_obst(y, x):
     y = 300 - y
     if (((x - 246) ** 2) / (60 * 60) + ((y - 145) ** 2) / (30 * 30)) <= 1:
@@ -62,7 +64,8 @@ def in_c_obst(y, x):
 
 def in_blob_obst1(y, x):
     y = 300 - y
-    if (y + (42/43)*x - (16485/43) >= 0) and (y - x + 265 >= 0) and (x <= 354) and (y - x + 180 <= 0) and (y + (7/29)*x - (6480/29) <= 0):
+    if (y + (42 / 43) * x - (16485 / 43) >= 0) and (y - x + 265 >= 0) and (x <= 355) and (y - x + 180 <= 0) and (
+            y + (7 / 29) * x - (6480 / 29) <= 0):
         return True
     else:
         return False
@@ -70,12 +73,13 @@ def in_blob_obst1(y, x):
 
 def in_blob_obst2(y, x):
     y = 300 - y
-    if (y - x + 265 >= 0) and (y - x + 216 <= 0) and (x >= 354) and (x <= 381):
+    if (y - x + 265 >= 0) and (y - x + 216 <= 0) and (x >= 353) and (x <= 381):
         return True
     else:
         return False
 
 
+# Function for each obstacle for coloring visited nodes
 def in_ellipse_obst_(y, x):
     y = 300 - y
     if (((x - 246) ** 2) / (60 * 60) + ((y - 145) ** 2) / (30 * 30)) < 1:
@@ -109,32 +113,34 @@ def in_c_obst_(y, x):
         return False
 
 
-def in_blob_obst_(y, x):
+def in_blob_obst1_(y, x):
     y = 300 - y
-    if (y - x + 265 > 0) and (y + x - 391 > 0) and (y - x + 222.6 < 0) and (x < 381.03) and \
-            (y - x + 210 < 0) and (y + 0.3639 * x - 263.33 < 0):
+    if (y + (42 / 43) * x - (16485 / 43) > 0) and (y - x + 265 > 0) and (x < 356) and (y - x + 180 < 0) and (
+            y + (7 / 29) * x - (6480 / 29) < 0):
         return True
     else:
         return False
 
 
+def in_blob_obst2_(y, x):
+    y = 300 - y
+    if (y - x + 265 > 0) and (y - x + 216 < 0) and (x > 353) and (x < 382):
+        return True
+    else:
+        return False
+
+
+# FUnction to check if the function is valid or not
 def check_validity(pointer):
     if in_ellipse_obst_(pointer[0], pointer[1]) or in_circle_obst_(pointer[0], pointer[1]) or \
-            in_blob_obst_(pointer[0], pointer[1]) or in_rectangle_obst_(pointer[0], pointer[1]) or in_c_obst_(
-        pointer[0], pointer[1]):
+            in_blob_obst1_(pointer[0], pointer[1]) or (in_blob_obst2_(pointer[0], pointer[1])) or in_rectangle_obst_(
+        pointer[0], pointer[1]) or in_c_obst_(pointer[0], pointer[1]):
         return False
     else:
         return True
 
 
-# def check_validity1(o, p):
-#     if in_ellipse_obst(o, p) or in_circle_obst(o, p) and \
-#             in_blob_obst(o, p) and in_rectangle_obst(o, p):
-#         return True
-#     else:
-#         return False
-
-
+# Function to generate possible node form given point
 def possible_moves(current_position):
     x = current_position[0]
     y = current_position[1]
@@ -178,6 +184,7 @@ def possible_moves(current_position):
     return legal_actions
 
 
+# FUnction to apply the possible move
 def move_point(current_pos, legal_move_given):
     p = legal_move_given[0]
     q = legal_move_given[1]
@@ -187,6 +194,7 @@ def move_point(current_pos, legal_move_given):
     return [current_pos_op[0], current_pos_op[1]]
 
 
+# Taking user input and commenting if its valid or not
 flag = True
 while flag:
     print('Enter the initial position...')
@@ -202,7 +210,7 @@ while flag:
     else:
         print("Either point is in obstacle space")
 
-
+# Initiate the variables
 plot_point(init[0], init[1])
 plot_point(goal[0], goal[1])
 goal_str = cvt_str(goal)
@@ -215,7 +223,7 @@ child = []
 tree_list = [[parent_index, init]]
 not_solved = True
 
-
+# Creating obstacle on image
 for i in range(300):
     for j in range(400):
         if in_ellipse_obst(i, j):
@@ -231,6 +239,7 @@ for i in range(300):
         if in_blob_obst2(i, j):
             blank_image[i * 3:(i + 1) * 3, j * 3:(j + 1) * 3] = (0, 0, 0)
 
+# Generate first layer manually
 legal_moves = possible_moves(init)
 # print(move_point(init, legal_moves[0]))
 for i in range(len(legal_moves)):
@@ -256,12 +265,16 @@ for i in range(len(legal_moves)):
             if not in_c_obst_(possible_node[0], possible_node[1]):
                 blank_image[possible_node[0] * 3:(int(possible_node[0]) + 1) * 3,
                 possible_node[1] * 3:(possible_node[1] + 1) * 3] = (0, 0, 255)
-            if not in_blob_obst_(possible_node[0], possible_node[1]):
+            if not in_blob_obst1_(possible_node[0], possible_node[1]):
+                blank_image[possible_node[0] * 3:(int(possible_node[0]) + 1) * 3,
+                possible_node[1] * 3:(possible_node[1] + 1) * 3] = (0, 0, 255)
+            if not in_blob_obst2_(possible_node[0], possible_node[1]):
                 blank_image[possible_node[0] * 3:(int(possible_node[0]) + 1) * 3,
                 possible_node[1] * 3:(possible_node[1] + 1) * 3] = (0, 0, 255)
 
     possible_node = [0, 0]
 
+# Creating a loop til we reach node
 while not_solved:
     current_point = left_to_check.pop(0)
     parent_index = parent_index + 1
@@ -289,7 +302,10 @@ while not_solved:
                 if not in_c_obst_(possible_node[0], possible_node[1]):
                     blank_image[possible_node[0] * 3:(int(possible_node[0]) + 1) * 3,
                     possible_node[1] * 3:(possible_node[1] + 1) * 3] = (0, 0, 255)
-                if not in_blob_obst_(possible_node[0], possible_node[1]):
+                if not in_blob_obst1(possible_node[0], possible_node[1]):
+                    blank_image[possible_node[0] * 3:(int(possible_node[0]) + 1) * 3,
+                    possible_node[1] * 3:(possible_node[1] + 1) * 3] = (0, 0, 255)
+                if not in_blob_obst2(possible_node[0], possible_node[1]):
                     blank_image[possible_node[0] * 3:(int(possible_node[0]) + 1) * 3,
                     possible_node[1] * 3:(possible_node[1] + 1) * 3] = (0, 0, 255)
                 if possible_node_string == goal_str:
@@ -305,6 +321,7 @@ while not_solved:
 
 Var = True
 
+# Initiating backtracking
 # creating a variable
 m = len(tree_list) - 1
 list_of_path = []
@@ -312,7 +329,7 @@ list_of_path = []
 while Var:
 
     # Printing the path
-    print(tree_list[m][1])
+    # print(tree_list[m][1])
 
     # Saving the path
     list_of_path.append(tree_list[m][1])
@@ -323,12 +340,8 @@ while Var:
     # If reached the initial state, change variable to false
     # This will exit the loop
     if m == 0:
-        print(tree_list[m][1])
         list_of_path.append(tree_list[m][1])
         Var = False
-    # print(list_of_path)
-    # print(list_of_path[0])
-    # print(list_of_path[0][0])
     for i in range(len(list_of_path)):
         from_x = int(list_of_path[i][0] * 3)
         to_x = int((list_of_path[i][0] + 1) * 3)
@@ -336,11 +349,11 @@ while Var:
         to_y = int((list_of_path[i][1] + 1) * 3)
         blank_image[from_x:to_x, from_y:to_y] = (0, 255, 0)
 
-
 while True:
     cv2.imshow("bk", blank_image)
     # result.write(blank_image)
     # break
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        cv2.destroyAllWindows()
         break
 # result.release()
