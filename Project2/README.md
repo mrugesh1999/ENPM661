@@ -6,7 +6,7 @@ UMD ENPM 661 Spring 2021 batch. The folders consists of python
 program along with generated outputs as .mp4 files.
   
     This project will slove given path planning puzzel with BFS 
-  (Brute Force Search) algorithm.
+    (Breath First Search) algorithm.
 	
 #### These files are executable:
   * FInal.py
@@ -27,9 +27,9 @@ program along with generated outputs as .mp4 files.
   sudo apt install python3-opencv
   ````
 * NumPy
-	````
-	pip install numpy
-	````
+  ````
+  pip install numpy
+  ````
 	
 ### Running code in ubuntu
 After installing dependencies, 
