@@ -1,4 +1,4 @@
-# Project 1
+# Project 2
 
 ## Introduction 
 This file includes python program solution for Project 2 for
