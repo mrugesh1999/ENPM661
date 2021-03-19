@@ -205,7 +205,7 @@ while flag:
     yg = int(input("Enter your value of Y-Axis: "))
     init = [yi, xi]
     goal = [yg, xg]
-    if check_validity(init) or check_validity(goal):
+    if check_validity(init) and check_validity(goal):
         flag = False
     else:
         print("Either point is in obstacle space")
