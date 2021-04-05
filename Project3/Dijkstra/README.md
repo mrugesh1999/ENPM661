@@ -1,4 +1,4 @@
-# Project 3
+# Project 3 Phase 1
 
 ## Introduction 
 This file includes python program solution for Project 3 for
